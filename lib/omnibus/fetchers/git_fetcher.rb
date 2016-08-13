@@ -210,6 +210,7 @@ module Omnibus
     #   the shellout object
     #
     def git(command)
+      puts "GIT COMMAND RUN"
       shellout!("git -c core.autocrlf=false #{command}", cwd: project_dir)
     end
 

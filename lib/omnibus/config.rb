@@ -461,14 +461,16 @@ module Omnibus
     # @return [:x86, :x64]
     default(:windows_arch) do
       if Ohai["kernel"]["machine"] == "x86_64"
-        Omnibus.logger.deprecated("Config") do
-          "windows_arch is defaulting to :x86. In Omnibus 5, it will " \
-          "default to :x64 if the machine architecture is x86_64. " \
-          "If you would like to continue building 32 bit packages, please "\
-          "manually set windows_arch in your omnibus.rb file to :x86."
-        end
+        # Omnibus.logger.deprecated("Config") do
+        #   "windows_arch is defaulting to :x86. In Omnibus 5, it will " \
+        #   "default to :x64 if the machine architecture is x86_64. " \
+        #   "If you would like to continue building 32 bit packages, please "\
+        #   "manually set windows_arch in your omnibus.rb file to :x86."
+        # end
+        :x64
+      else
+        :x86
       end
-      :x86
     end
 
     # --------------------------------------------------
