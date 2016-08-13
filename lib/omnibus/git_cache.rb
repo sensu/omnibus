@@ -178,7 +178,8 @@ refs}.freeze
     # @return [Mixlib::Shellout] the underlying command object.
     #
     def git_cmd(command)
-      shellout!("git -c core.autocrlf=false --git-dir=#{cache_path} --work-tree=#{install_dir} #{command}")
+      work_tree = software.project.install_dir
+      shellout!("git -c core.autocrlf=false --git-dir=#{cache_path} --work-tree=#{work_tree} #{command}")
     end
 
     #
