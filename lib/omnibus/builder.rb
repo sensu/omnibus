@@ -536,7 +536,6 @@ module Omnibus
         Dir.chdir(software.project_dir) do
           parent = File.dirname(file)
           FileUtils.mkdir_p(parent) unless File.directory?(parent)
-
           FileUtils.touch(file, options)
         end
       end
@@ -772,7 +771,7 @@ module Omnibus
     private
 
     def embedded_bin(bin)
-      windows_safe_path("#{install_dir}/embedded/bin/#{bin}")
+      "#{install_dir}/embedded/bin/#{bin}"
     end
 
     #

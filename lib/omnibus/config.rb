@@ -467,10 +467,8 @@ module Omnibus
         #   "If you would like to continue building 32 bit packages, please "\
         #   "manually set windows_arch in your omnibus.rb file to :x86."
         # end
-        :x64
-      else
-        :x86
       end
+      :x86
     end
 
     # --------------------------------------------------
