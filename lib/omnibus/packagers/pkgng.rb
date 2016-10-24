@@ -228,10 +228,10 @@ module Omnibus
     expose :groups
 
     #
-    # Set or return the dependencies for this package.
+    # Set or return the runtime dependencies for this package.
     #
     # @example
-    #   dependencies {
+    #   runtime_dependencies {
     #     "libiconv" => {
     #       "origin" => "converters/libiconv",
     #       "version" => "1.13.1_2"
@@ -239,23 +239,23 @@ module Omnibus
     #   }
     #
     # @param [Hash] val
-    #   the dependencies for this package
+    #   the runtime dependencies for this package
     #
     # @return [Hash]
-    #   the dependencies for this package
+    #   the runtime dependencies for this package
     #
-    def dependencies(val = NULL)
+    def runtime_dependencies(val = NULL)
       if null?(val)
-        @dependencies || {}
+        @runtime_dependencies || {}
       else
         unless val.is_a?(Hash)
-          raise InvalidValue.new(:dependencies, "be a Hash")
+          raise InvalidValue.new(:runtime_dependencies, "be a Hash")
         end
 
-        @dependencies = val
+        @runtime_dependencies = val
       end
     end
-    expose :dependencies
+    expose :runtime_dependencies
 
     #
     # Set or return the options for this package.
@@ -332,7 +332,7 @@ module Omnibus
         options: options,
         desc: project.description,
         categories: categories,
-        deps: dependencies,
+        deps: runtime_dependencies,
       }
     end
 
