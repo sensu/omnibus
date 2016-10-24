@@ -135,17 +135,17 @@ module Omnibus
       end
     end
 
-    describe "#dependencies" do
+    describe "#runtime_dependencies" do
       it "is a DSL method" do
-        expect(subject).to have_exposed_method(:dependencies)
+        expect(subject).to have_exposed_method(:runtime_dependencies)
       end
 
       it "has a default value" do
-        expect(subject.dependencies).to eq({})
+        expect(subject.runtime_dependencies).to eq({})
       end
 
       it "must be a hash" do
-        expect { subject.dependencies(Object.new) }.to raise_error(InvalidValue)
+        expect { subject.runtime_dependencies(Object.new) }.to raise_error(InvalidValue)
       end
     end
 
