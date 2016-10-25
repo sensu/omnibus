@@ -430,7 +430,7 @@ module Omnibus
         "+MANIFEST",
       ]
       FileSyncer.glob(path).reduce({}) do |hash, path|
-        if File.file?(path) && !File.symlink?(path)
+        if File.file?(path)
           relative_path = path.gsub("#{staging_dir}/", "")
           unless exclude_files.include?(relative_path)
             absolute_path = File.join("/", relative_path)
