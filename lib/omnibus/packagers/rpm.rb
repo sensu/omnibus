@@ -321,13 +321,22 @@ module Omnibus
     end
 
     #
+    # Returns true if platform_family matches rhel and major version is 6 or above
+    #
+    # @return [TrueClass,FalseClass]
+    #
+    def rhel_6_or_newer?
+      Ohai["platform_family"] == "rhel" && (Gem::Version.new(Ohai["platform_version"]) >= Gem::Version("6"))
+    end
+
+    #
     # Mark filesystem directories with ownership and permissions specified in the filesystem package
     # https://git.fedorahosted.org/cgit/filesystem.git/plain/filesystem.spec
     #
     # @return [String]
     #
     def mark_filesystem_directories(fsdir)
-      if fsdir.eql?("/") || fsdir.eql?("/usr/lib") || fsdir.eql?("/usr/share/empty")
+      if fsdir.eql?("/") || fsdir.eql?("/usr/lib") || fsdir.eql?("/usr/share/empty") || (fsdir.eql?("/usr/bin") && rhel_6_or_newer?)
         "%dir %attr(0555,root,root) #{fsdir}"
       elsif filesystem_directories.include?(fsdir)
         "%dir %attr(0755,root,root) #{fsdir}"
