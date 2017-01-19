@@ -326,7 +326,7 @@ module Omnibus
     # @return [TrueClass,FalseClass]
     #
     def rhel_6_or_newer?
-      Ohai["platform_family"] == "rhel" && (Gem::Version.new(Ohai["platform_version"]) >= Gem::Version("6"))
+      Ohai["platform_family"] == "rhel" && (Gem::Version.new(Ohai["platform_version"]) >= Gem::Version.new("6"))
     end
 
     #
