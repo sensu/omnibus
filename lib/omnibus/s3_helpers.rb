@@ -132,10 +132,9 @@ module Omnibus
       # @return [Aws::S3::Object]
       #
       def store_object(key, content, content_md5, acl)
-        bucket.put_object({
+        obj_options = {
           key: key,
           body: content,
-          content_md5: to_base64_digest(content_md5),
           acl: acl,
         })
       end
