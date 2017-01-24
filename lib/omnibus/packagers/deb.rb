@@ -34,14 +34,19 @@ module Omnibus
       #
       # extra_package_file '/path/to/foo.txt' #=> /tmp/scratch/path/to/foo.txt
       project.extra_package_files.each do |file|
-        parent      = File.dirname(file)
-        destination = File.join(staging_dir, parent)
-
-        create_directory(destination)
-        copy_file(file, destination)
+        parent = File.dirname(file)
+        if File.directory?(file)
+          destination = File.join(staging_dir, file)
+          create_directory(destination)
+          FileSyncer.sync(file, destination)
+        else
+          destination = File.join(staging_dir, parent)
+          create_directory(destination)
+          copy_file(file, destination)
+        end
       end
 
-      # Create the Debain file directory
+      # Create the Debian file directory
       create_directory(debian_dir)
     end
 
