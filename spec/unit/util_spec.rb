@@ -64,7 +64,7 @@ module Omnibus
       it "logs both redacted and non-redacted environment variables" do
         output = capture_logging { subject.shellout("echo bwoop", environment: environment) }
         expect(output).to include("AWS_ACCESS_KEY_ID=\"123456\"")
-        expect(output).to include("AWS_SECRET_ACCESS_KEY=\"******\"")
+        expect(output).to include("AWS_SECRET_ACCESS_KEY=\"REDACTED\"")
       end
 
       it "outputs the command" do
