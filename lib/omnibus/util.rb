@@ -69,7 +69,7 @@ module Omnibus
       unless options[:environment].empty?
         log.public_send(log_level, log_key) { "Environment:" }
         options[:environment].sort.each do |key, value|
-          value = "******" if Config.redacted_environment_variables.include?(key)
+          value = "REDACTED" if Config.redacted_environment_variables.include?(key)
           log.public_send(log_level, log_key) { "  #{key}=#{value.inspect}" }
         end
       end
