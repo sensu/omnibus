@@ -611,6 +611,19 @@ module Omnibus
     # @!endgroup
     #
 
+    #
+    # @!group Environment Parameters
+    # --------------------------------------------------
+
+    # A list of environment variables to redact
+    #
+    # @return [Array]
+    default(:redacted_environment_variables, [])
+
+    # --------------------------------------------------
+    # @!endgroup
+    #
+
     private
 
     #

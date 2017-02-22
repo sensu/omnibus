@@ -36,6 +36,10 @@ module Omnibus
     end
 
     describe "#shellout!" do
+      before do
+        Config.redacted_environment_variables(["AWS_SECRET_ACCESS_KEY"])
+      end
+      
       let(:shellout) do
         double(Mixlib::ShellOut,
           command:     "evil command",
@@ -48,6 +52,24 @@ module Omnibus
             "I_LOVE_YOU" => "barney",
           }
         )
+      end
+
+      let(:environment) {
+        {
+          "AWS_ACCESS_KEY_ID" => "123456",
+          "AWS_SECRET_ACCESS_KEY" => "supersecret"
+        }
+      }
+
+      it "logs both redacted and non-redacted environment variables" do
+        output = capture_logging { subject.shellout("echo bwoop", environment: environment) }
+        expect(output).to include("AWS_ACCESS_KEY_ID=\"123456\"")
+        expect(output).to include("AWS_SECRET_ACCESS_KEY=\"******\"")
+      end
+
+      it "outputs the command" do
+        output = capture_logging { subject.shellout("echo bwoop", environment: environment) }
+        expect(output).to include("echo bwoop")
       end
 
       context "when the command fails" do
