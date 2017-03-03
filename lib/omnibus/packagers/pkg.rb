@@ -29,6 +29,36 @@ module Omnibus
     id :pkg
 
     setup do
+      # Create the root directory
+      create_directory(root_dir)
+
+      # Copy the full-stack installer into our scratch directory, accounting for
+      # any excluded files.
+      #
+      # /opt/hamlet => /tmp/daj29013/root/opt/hamlet
+      destination = File.join(root_dir, project.install_dir)
+      FileSyncer.sync(project.install_dir, destination, exclude: exclusions)
+
+      # Copy over any user-specified extra package files.
+      #
+      # Files retain their relative paths inside the scratch directory, so
+      # we need to grab the dirname of the file, create that directory, and
+      # then copy the file into that directory.
+      #
+      # extra_package_file '/path/to/foo.txt' #=> /tmp/scratch/path/to/foo.txt
+      project.extra_package_files.each do |file|
+        parent = File.dirname(file)
+        if File.directory?(file)
+          destination = File.join(staging_dir, file)
+          create_directory(destination)
+          FileSyncer.sync(file, destination)
+        else
+          destination = File.join(staging_dir, parent)
+          create_directory(destination)
+          copy_file(file, destination)
+        end
+      end
+
       # Create the resources directory
       create_directory(resources_dir)
 
@@ -67,6 +97,8 @@ module Omnibus
       write_scripts
 
       build_component_pkg
+
+      remove_directory(root_dir)
 
       write_distribution_file
 
@@ -138,6 +170,16 @@ module Omnibus
     end
 
     #
+    # The path where the product files will live. Any package files
+    # and extra_package_files should exist here before +pkgbuild+ is used.
+    #
+    # @return [String]
+    #
+    def root_dir
+      File.expand_path("#{staging_dir}/root")
+    end
+
+    #
     # The path where the product package resources will live. We cannot store
     # resources in the top-level staging dir, because +productbuild+'s
     # +--resources+ flag expects a directory that does not contain the parent
@@ -192,8 +234,8 @@ module Omnibus
           --identifier "#{safe_identifier}" \\
           --version "#{safe_version}" \\
           --scripts "#{scripts_dir}" \\
-          --root "#{project.install_dir}" \\
-          --install-location "#{project.install_dir}" \\
+          --root "#{root_dir}" \\
+          --install-location "/" \\
           "#{component_pkg}"
       EOH
 
