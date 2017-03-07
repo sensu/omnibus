@@ -49,11 +49,11 @@ module Omnibus
       project.extra_package_files.each do |file|
         parent = File.dirname(file)
         if File.directory?(file)
-          destination = File.join(staging_dir, file)
+          destination = File.join(root_dir, file)
           create_directory(destination)
           FileSyncer.sync(file, destination)
         else
-          destination = File.join(staging_dir, parent)
+          destination = File.join(root_dir, parent)
           create_directory(destination)
           copy_file(file, destination)
         end
