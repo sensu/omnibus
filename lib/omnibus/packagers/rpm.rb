@@ -342,7 +342,7 @@ module Omnibus
     # @return [String]
     #
     def mark_filesystem_directories(fsdir)
-      if filesystem_directories.include(fsdir)
+      if filesystem_directories.include?(fsdir)
         return ""
       else
         "%dir #{fsdir}"
