@@ -336,16 +336,14 @@ module Omnibus
     end
 
     #
-    # Mark filesystem directories with ownership and permissions specified in the filesystem package
+    # Do not include filesystem directories specified in the filesystem package
     # https://git.fedorahosted.org/cgit/filesystem.git/plain/filesystem.spec
     #
     # @return [String]
     #
     def mark_filesystem_directories(fsdir)
-      if fsdir.eql?("/") || fsdir.eql?("/usr/lib") || fsdir.eql?("/usr/share/empty") || (fsdir.eql?("/usr/bin") && rhel_6_or_newer?)
-        return "%dir %attr(0555,root,root) #{fsdir}"
-      elsif filesystem_directories.include?(fsdir)
-        return "%dir %attr(0755,root,root) #{fsdir}"
+      if filesystem_directories.include(fsdir)
+        return ""
       else
         return "%dir #{fsdir}"
       end
