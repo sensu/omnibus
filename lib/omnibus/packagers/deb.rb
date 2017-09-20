@@ -577,7 +577,7 @@ module Omnibus
     # @return [String]
     #
     def safe_architecture
-      @safe_architecture ||= shellout!("dpkg --print-architecture").stdout.split("\n").first || "noarch"
+      @safe_architecture ||= "i386" # shellout!("dpkg --print-architecture").stdout.split("\n").first || "noarch"
     end
   end
 end
