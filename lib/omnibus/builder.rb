@@ -177,9 +177,6 @@ module Omnibus
       if windows?
         platform = windows_arch_i386? ? "i686-w64-mingw32" : "x86_64-w64-mingw32"
         configure_cmd << "--build=#{platform}"
-      elsif linux?
-        configure_cmd << "--host=i686-linux-gnu"
-        # CFLAGS=-m32 CXXFLAGS=-m32 LDFLAGS=-m32"
       end
 
       # Accept a prefix override if provided. Can be set to '' to suppress
