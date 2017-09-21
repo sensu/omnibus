@@ -33,8 +33,6 @@ platform}.freeze
 
       def ohai
         @ohai ||= ::Ohai::System.new.tap { |o| o.all_plugins(PLUGINS) }.data
-        @ohai["kernel"]["machine"] = "i386"
-        @ohai
       end
     end
   end
