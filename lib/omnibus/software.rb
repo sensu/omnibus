@@ -723,9 +723,8 @@ module Omnibus
           }
         else
           {
-            "LDFLAGS" => "-m32 -Wl,-rpath,#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
-            "CFLAGS" => "-m32 -I#{install_dir}/embedded/include -O2",
-            "CXXFLAGS" => "-m32",
+            "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib",
+            "CFLAGS" => "-I#{install_dir}/embedded/include -O2",
           }
         end
 
