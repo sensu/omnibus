@@ -758,6 +758,13 @@ module Omnibus
         extra_linker_flags["LD_OPTIONS"] = ld_options
       end
 
+      env_flags = {
+        "CFLAGS" => ENV.fetch("CFLAGS", ""),
+        "LDFLAGS" => ENV.fetch("LDFLAGS", ""),
+        "CXXFLAGS" => ENV.fetch("CXXFLAGS", ""),
+        "CPPFLAGS" => ENV.fetch("CPPFLAGS", ""),
+      }
+
       env.merge(compiler_flags).
         merge(extra_linker_flags).
         # always want to favor pkg-config from embedded location to not hose
