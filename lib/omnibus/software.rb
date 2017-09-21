@@ -780,10 +780,10 @@ module Omnibus
         # CFLAGS and LDFLAGS in favor of pkg-config info
         merge({ "PKG_CONFIG_PATH" => "#{install_dir}/embedded/lib/pkgconfig" }).
         # Set default values for CXXFLAGS and CPPFLAGS.
-        merge("CFLAGS" => compiler_flags["CFLAGS"] << (ENV["CFLAGS"] || "")).
-        merge("LDFLAGS" => compiler_flags["LDFLAGS"] << (ENV["LDFLAGS"] || "")).
-        merge("CXXFLAGS" => compiler_flags["CFLAGS"] << (ENV["CXXFLAGS"] || "")).
-        merge("CPPFLAGS" => compiler_flags["CFLAGS"] << (ENV["CPPFLAGS"] || ""))
+        merge("CFLAGS" => compiler_flags["CFLAGS"] << " " + (ENV["CFLAGS"] || "")).
+        merge("LDFLAGS" => compiler_flags["LDFLAGS"] << " " + (ENV["LDFLAGS"] || "")).
+        merge("CXXFLAGS" => compiler_flags["CXXFLAGS"] << " " + (ENV["CXXFLAGS"] || "")).
+        merge("CPPFLAGS" => compiler_flags["CPPFLAGS"] << " " + (ENV["CPPFLAGS"] || ""))
     end
     expose :with_standard_compiler_flags
 
