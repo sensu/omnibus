@@ -773,6 +773,13 @@ module Omnibus
         extra_linker_flags["LD_OPTIONS"] = ld_options
       end
 
+      env_flags = {
+        "CFLAGS" => ENV.fetch("CFLAGS", ""),
+        "LDFLAGS" => ENV.fetch("LDFLAGS", ""),
+        "CXXFLAGS" => ENV.fetch("CXXFLAGS", ""),
+        "CPPFLAGS" => ENV.fetch("CPPFLAGS", ""),
+      }
+
       env.merge(compiler_flags).
         merge(extra_linker_flags).
         # always want to favor pkg-config from embedded location to not hose
@@ -780,10 +787,10 @@ module Omnibus
         # CFLAGS and LDFLAGS in favor of pkg-config info
         merge({ "PKG_CONFIG_PATH" => "#{install_dir}/embedded/lib/pkgconfig" }).
         # Set default values for CXXFLAGS and CPPFLAGS.
-        merge("CFLAGS" => compiler_flags["CFLAGS"] << " " + (ENV["CFLAGS"] || "")).
-        merge("LDFLAGS" => compiler_flags["LDFLAGS"] << " " + (ENV["LDFLAGS"] || "")).
-        merge("CXXFLAGS" => compiler_flags["CXXFLAGS"] << " " + (ENV["CXXFLAGS"] || "")).
-        merge("CPPFLAGS" => compiler_flags["CPPFLAGS"] << " " + (ENV["CPPFLAGS"] || ""))
+        merge("CFLAGS" => compiler_flags.fetch("CFLAGS", "") << " #{env_flags['CFLAGS']}").
+        merge("LDFLAGS" => compiler_flags.fetch("LDFLAGS", "") << " #{env_flags['LDFLAGS']}").
+        merge("CXXFLAGS" => compiler_flags.fetch("CXXFLAGS", "") << " #{env_flags['CXXFLAGS']}").
+        merge("CPPFLAGS" => compiler_flags.fetch("CPPFLAGS", "") << " #{env_flags['CPPFLAGS']}")
     end
     expose :with_standard_compiler_flags
 
