@@ -422,13 +422,6 @@ module Omnibus
       raise MissingRequiredAttribute.new(self, :packagecloud_token, "'EFGH5678'")
     end
 
-    # The packagecloud repository to upload the package(s) to.
-    #
-    # @return [String]
-    default(:packagecloud_repo) do
-      raise MissingRequiredAttribute.new(self, :packagecloud_repo, "'EFGH5678'")
-    end
-
     # The packagecloud distribution(s) to upload the package(s) to. Comma-separated.
     #
     # @return [String]
