@@ -72,6 +72,7 @@ module Omnibus
   autoload :ArtifactoryPublisher, "omnibus/publishers/artifactory_publisher"
   autoload :NullPublisher,        "omnibus/publishers/null_publisher"
   autoload :S3Publisher,          "omnibus/publishers/s3_publisher"
+  autoload :PackagecloudPublisher,          "omnibus/publishers/packagecloud_publisher"
 
   autoload :Manifest,      "omnibus/manifest"
   autoload :ManifestEntry, "omnibus/manifest_entry"
