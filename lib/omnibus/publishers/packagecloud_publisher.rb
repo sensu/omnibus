@@ -19,7 +19,7 @@ module Omnibus
         pkg = Packagecloud::Package.new(:file => package.path)
 
         distros.each do |distro|
-          client.put_package(Config.packagecloud_repo, pkg, distro)
+          client.put_package(@options[:repo], pkg, distro)
         end
 
         # If a block was given, "yield" the package to the caller
