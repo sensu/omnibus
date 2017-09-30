@@ -15,10 +15,10 @@ module Omnibus
         package.validate!
 
         # Upload the package
-        log.info(log_key) { "Uploading '#{package.name}'" }
         pkg = Packagecloud::Package.new(:file => package.path)
 
         distros.each do |distro|
+          log.info(log_key) { "Uploading '#{package.name}' to '#{distro}' distribution in '#{@options[:repo]}' repository" }
           client.put_package(@options[:repo], pkg, distro)
         end
 
