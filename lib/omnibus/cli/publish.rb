@@ -84,17 +84,6 @@ module Omnibus
       publish(ArtifactoryPublisher, pattern, options)
     end
 
-    #
-    # Publish to packagecloud.
-    #
-    #   $ omnibus publish packagecloud community pkg/chef*
-    #
-    desc "packagecloud REPOSITORY PATTERN", "Publish to packagecloud"
-    def packagecloud(repo, pattern)
-      options[:repo] = repo
-      publish(PackagecloudPublisher, pattern, options)
-    end
-
     private
 
     #

@@ -405,35 +405,6 @@ module Omnibus
     #
 
     #
-    # @!group packagecloud Publisher
-    # --------------------------------------------------
-
-    # The packagecloud username to use for package upload.
-    #
-    # @return [String]
-    default(:packagecloud_user) do
-      raise MissingRequiredAttribute.new(self, :packagecloud_user, "'ABCD1234'")
-    end
-
-    # The packagecloud api token to use for package upload.
-    #
-    # @return [String]
-    default(:packagecloud_token) do
-      raise MissingRequiredAttribute.new(self, :packagecloud_token, "'EFGH5678'")
-    end
-
-    # The packagecloud distribution(s) to upload the package(s) to. Comma-separated.
-    #
-    # @return [String]
-    default(:packagecloud_distros) do
-      raise MissingRequiredAttribute.new(self, :packagecloud_distros, "'EFGH5678,ABCD1234'")
-    end
-
-    # --------------------------------------------------
-    # @!endgroup
-    #
-
-    #
     # @!group Miscellaneous Configuration Parameters
     # --------------------------------------------------
 

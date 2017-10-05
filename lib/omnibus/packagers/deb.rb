@@ -97,31 +97,6 @@ module Omnibus
     expose :vendor
 
     #
-    # Set or return the architecture for this package.
-    #
-    # @example
-    #   architecture "i386"
-    #
-    # @param [String] val
-    #   the architecture for this package
-    #
-    # @return [String]
-    #   the architecture for this package
-    #
-    def architecture(val = NULL)
-      if null?(val)
-        @architecture || safe_architecture
-      else
-        unless val.is_a?(String)
-          raise InvalidValue.new(:architecture, "be a String")
-        end
-
-        @architecture = val
-      end
-    end
-    expose :architecture
-
-    #
     # Set or return the license for this package.
     #
     # @example
@@ -521,7 +496,7 @@ module Omnibus
     # @return [String]
     #
     def safe_architecture
-      @safe_architecture ||= @architecture || shellout!("dpkg --print-architecture").stdout.split("\n").first || "noarch"
+      @safe_architecture ||= shellout!("dpkg --print-architecture").stdout.split("\n").first || "noarch"
     end
   end
 end
