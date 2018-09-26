@@ -32,6 +32,7 @@ module Omnibus
 
     build do
       write_scripts
+      copy_files
       write_prototype_file
       write_pkginfo_file
       create_solaris_file
@@ -52,6 +53,50 @@ module Omnibus
 
     def install_basename
       File.basename(project.install_dir)
+    end
+
+    def root_dir
+      "#{staging_dir}/root"
+    end
+
+    def filesystem_directories
+      @filesystem_directories ||= IO.readlines(resource_path("filesystem_list")).map { |f| f.chomp }
+    end
+
+    def filesystem_dir?(fsdir)
+      filesystem_directories.include?(fsdir)
+    end
+
+    #
+    # Copy stuff
+    #
+    def copy_files
+      # Copy the full-stack installer into our scratch directory, accounting for
+      # any excluded files.
+      #
+      # /opt/hamlet => /tmp/daj29013/opt/hamlet
+      destination = File.join(root_dir, project.install_dir)
+      FileSyncer.sync(project.install_dir, destination, exclude: exclusions)
+
+      # Copy over any user-specified extra package files.
+      #
+      # Files retain their relative paths inside the scratch directory, so
+      # we need to grab the dirname of the file, create that directory, and
+      # then copy the file into that directory.
+      #
+      # extra_package_file '/path/to/foo.txt' #=> /tmp/scratch/path/to/foo.txt
+      project.extra_package_files.each do |file|
+        parent = File.dirname(file)
+        if File.directory?(file)
+          destination = File.join(root_dir, file)
+          create_directory(destination)
+          FileSyncer.sync(file, destination)
+        else
+          destination = File.join(root_dir, parent)
+          create_directory(destination)
+          copy_file(file, destination)
+        end
+      end
     end
 
     #
@@ -76,13 +121,15 @@ module Omnibus
     # Generate a Prototype file for solaris build
     #
     def write_prototype_file
-      shellout! "cd #{install_dirname} && find #{install_basename} -print > #{staging_dir_path('files')}"
+      shellout! "cd #{root_dir} && find . -print > #{staging_dir_path('files')}"
 
       File.open staging_dir_path("files.clean"), "w+" do |fout|
         File.open staging_dir_path("files") do |fin|
           fin.each_line do |line|
             if line.chomp =~ /\s/
-              log.warn(log_key) { "Skipping packaging '#{line}' file due to whitespace in filename" }
+              log.warn(log_key) { "Skipping packaging '#{line.chomp}' file due to whitespace in filename" }
+            elsif filesystem_dir?(line.chomp[1..-1])
+              log.info(log_key) { "Skipping packaging '#{line.chomp}' file as it is a filesystem directory" }
             else
               fout.write(line)
             end
@@ -100,7 +147,7 @@ module Omnibus
       end
 
       # generate the prototype's file list
-      shellout! "cd #{install_dirname} && pkgproto < #{staging_dir_path('files.clean')} > #{staging_dir_path('Prototype.files')}"
+      shellout! "cd #{root_dir} && pkgproto < #{staging_dir_path('files.clean')} > #{staging_dir_path('Prototype.files')}"
 
       # fix up the user and group in the file list to root
       shellout! "awk '{ $5 = \"root\"; $6 = \"root\"; print }' < #{staging_dir_path('Prototype.files')} >> #{staging_dir_path('Prototype')}"
@@ -117,7 +164,7 @@ module Omnibus
         CLASSES=none
         TZ=PST
         PATH=/sbin:/usr/sbin:/usr/bin:/usr/sadm/install/bin
-        BASEDIR=#{install_dirname}
+        BASEDIR=/
         PKG=#{project.package_name}
         NAME=#{project.package_name}
         ARCH=#{safe_architecture}
@@ -139,9 +186,9 @@ module Omnibus
     # @return [void]
     #
     def create_solaris_file
-      shellout! "pkgmk -o -r #{install_dirname} -d #{staging_dir} -f #{staging_dir_path('Prototype')}"
-      shellout! "pkgchk -vd #{staging_dir} #{project.package_name}"
-      shellout! "pkgtrans #{staging_dir} #{package_path} #{project.package_name}"
+      shellout! "pkgmk -o -r / -d #{root_dir} -f #{staging_dir_path('Prototype')}"
+      shellout! "pkgchk -vd #{root_dir} #{project.package_name}"
+      shellout! "pkgtrans #{root_dir} #{package_path} #{project.package_name}"
     end
 
     #
