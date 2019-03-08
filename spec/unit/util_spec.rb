@@ -39,7 +39,7 @@ module Omnibus
       before do
         Config.redacted_environment_variables(["AWS_SECRET_ACCESS_KEY"])
       end
-      
+
       let(:shellout) do
         double(Mixlib::ShellOut,
           command:     "evil command",

@@ -345,7 +345,7 @@ module Omnibus
       if filesystem_directories.include?(fsdir)
         return ""
       else
-        "%dir #{fsdir}"
+        return "%dir #{fsdir}"
       end
     end
 
