@@ -1,3 +1,8 @@
+> [!WARNING]
+> **This repository is scheduled to be archived on 13th November 2026.**
+>
+> After that date it will be read-only: no new commits, issues, or pull requests, and no further maintenance or security updates will be issued.
+
 # ![Omnibus Icon](lib/omnibus/assets/README-logo.png) Omnibus
 
 [![Gem Version](http://img.shields.io/gem/v/omnibus.svg)][gem] [![Travis Build Status](http://img.shields.io/travis/chef/omnibus.svg?label=Travis CI)][travis] [![AppVeyor Build Status](http://img.shields.io/appveyor/ci/chef/omnibus.svg?label=AppVeyor)][appveyor]
